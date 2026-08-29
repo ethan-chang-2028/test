@@ -29,15 +29,15 @@
             <span class="logo">PAINT BATTLE</span>
         </div>
         <div class="nav-links">
-            <button class="nav-btn active" data-page="home">Home</button>
-            <button class="nav-btn" data-page="play">Play</button>
-            <button class="nav-btn" data-page="collection">Collection</button>
-            <button class="nav-btn" data-page="shop">Shop</button>
-            <button class="nav-btn" data-page="profile">Profile</button>
+            <button class="nav-btn active" data-page="home" onclick="navigateTo('home')">Home</button>
+            <button class="nav-btn" data-page="play" onclick="navigateTo('play')">Play</button>
+            <button class="nav-btn" data-page="collection" onclick="navigateTo('collection')">Collection</button>
+            <button class="nav-btn" data-page="shop" onclick="navigateTo('shop')">Shop</button>
+            <button class="nav-btn" data-page="profile" onclick="navigateTo('profile')">Profile</button>
         </div>
         <div class="nav-auth">
-            <button id="login-btn" class="btn btn-outline">Login</button>
-            <button id="register-btn" class="btn btn-outline">Sign Up</button>
+            <button id="login-btn" class="btn btn-outline" onclick="showModal('login-modal')">Login</button>
+            <button id="register-btn" class="btn btn-outline" onclick="showModal('register-modal')">Sign Up</button>
         </div>
     </nav>
 
@@ -50,9 +50,10 @@
                     <h1 class="hero-title">PAINT BATTLE</h1>
                     <p class="hero-subtitle">Conquer the Canvas. Claim the Grid.</p>
                     <div class="hero-buttons">
-                        <button class="btn btn-primary btn-lg" onclick="quickPlay('1v1')">Quick Play (1v1)</button>
-                        <button class="btn btn-secondary btn-lg" onclick="quickPlay('4_player')">4-Player</button>
-                        <button class="btn btn-secondary btn-lg" onclick="showTutorial()">Tutorial</button>
+                        <button class="btn btn-primary btn-lg" onclick="navigateTo('play')">Play Now</button>
+                        <button class="btn btn-secondary btn-lg" onclick="showModal('tutorial-modal')">How to Play</button>
+                        <button class="btn btn-secondary btn-lg" onclick="navigateTo('collection')">My Collection</button>
+                        <button class="btn btn-secondary btn-lg" onclick="navigateTo('shop')">Shop</button>
                     </div>
                 </div>
                 <div class="hero-visual">
@@ -97,6 +98,7 @@
                 <div id="quick-tab" class="tab-content active">
                     <div class="mode-select">
                         <button class="mode-btn selected" data-mode="1v1" onclick="selectMode('1v1')">1v1</button>
+                        <button class="mode-btn" data-mode="2v2" onclick="selectMode('2v2')">2v2</button>
                         <button class="mode-btn" data-mode="4_player" onclick="selectMode('4_player')">4-Player</button>
                         <button class="mode-btn" data-mode="9_player" onclick="selectMode('9_player')">9-Player</button>
                     </div>
@@ -111,7 +113,7 @@
                         <div id="loadout-select" class="select-grid"></div>
                     </div>
 
-                    <button class="btn btn-primary btn-lg" onclick="startQuickPlay()">Find Match</button>
+                    <button class="btn btn-primary btn-lg" onclick="startQuickPlay()">Start Matchmaking</button>
                 </div>
 
                 <!-- Custom Game Tab -->
@@ -139,7 +141,7 @@
                             <option value="ranked">Ranked</option>
                         </select>
                     </div>
-                    <button class="btn btn-primary btn-lg" onclick="createCustomGame()">Create Game</button>
+                    <button class="btn btn-primary btn-lg" onclick="createCustomGame()">Create Custom Game</button>
                 </div>
 
                 <!-- Private Game Tab -->
@@ -149,7 +151,7 @@
                         <input type="text" id="invite-code" class="form-input" placeholder="Enter invite code">
                     </div>
                     <button class="btn btn-primary btn-lg" onclick="joinPrivateGame()">Join Game</button>
-                    <button class="btn btn-secondary" onclick="createPrivateGame()">Create Private Game</button>
+                    <button class="btn btn-secondary" onclick="createPrivateGame()">Create Private Room</button>
                 </div>
             </div>
         </div>
@@ -598,6 +600,34 @@
     </div>
 
     <!-- Scripts -->
+    <!-- Global function declarations for direct access -->
+    <script>
+    // Declare global functions so they work even if modules fail
+    window.navigateTo = function(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        const page = document.getElementById(pageId + '-page');
+        if (page) page.classList.add('active');
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.page === pageId) btn.classList.add('active');
+        });
+    };
+    window.showModal = function(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    };
+    window.hideModal = function(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    };
+    </script>
+    
     <script src="js/config.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/api.js"></script>
@@ -610,5 +640,47 @@
     <script src="js/ui/collection.js"></script>
     <script src="js/ui/shop.js"></script>
     <script src="js/app.js"></script>
+    
+    <!-- Fallback: Ensure navigation works even if app.js fails -->
+    <script>
+    // Initialize navigation if it wasn't already
+    if (typeof initNavigation === 'function') {
+        try { initNavigation(); } catch(e) { console.log('Navigation init failed, using fallback'); }
+    }
+    if (typeof initModals === 'function') {
+        try { initModals(); } catch(e) { console.log('Modals init failed, using fallback'); }
+    }
+    // Make sure navigateTo works
+    if (typeof navigateTo !== 'function') {
+        window.navigateTo = function(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const page = document.getElementById(pageId + '-page');
+            if (page) page.classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.page === pageId) btn.classList.add('active');
+            });
+        };
+    }
+    // Make sure show/hide modal works
+    if (typeof showModal !== 'function') {
+        window.showModal = function(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        };
+    }
+    if (typeof hideModal !== 'function') {
+        window.hideModal = function(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        };
+    }
+    </script>
 </body>
 </html>

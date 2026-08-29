@@ -324,7 +324,17 @@ function createMatchDetailsModal() {
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initApp);
 } else {
-    initApp();
+    // Try to init immediately, but if it fails, still show the UI
+    try {
+        initApp();
+    } catch (e) {
+        console.error('App init failed:', e);
+        // Ensure at least the home page is visible
+        const homePage = document.getElementById('home-page');
+        const loadingScreen = document.getElementById('loading-screen');
+        if (homePage) homePage.classList.add('active');
+        if (loadingScreen) loadingScreen.classList.add('hidden');
+    }
 }
 
 if (typeof module !== 'undefined' && module.exports) {

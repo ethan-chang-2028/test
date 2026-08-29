@@ -17,6 +17,11 @@ function initNavigation() {
     if (registerBtn) registerBtn.addEventListener('click', () => showModal('register-modal'));
     
     updateAuthUI();
+    
+    // Fallback: if no nav buttons work, ensure home page is shown
+    if (pages.length > 0 && !document.querySelector('.page.active')) {
+        pages[0].classList.add('active');
+    }
 }
 
 function navigateTo(pageId) {
@@ -42,7 +47,11 @@ function updatePageContent(pageId) {
 }
 
 function updateHomePage() {
-    startHeroAnimation();
+    try {
+        startHeroAnimation();
+    } catch (e) {
+        console.log('Hero animation failed, continuing...');
+    }
 }
 
 function updatePlayPage() {
@@ -50,6 +59,15 @@ function updatePlayPage() {
     loadLoadouts();
     setupModeSelection();
     setupPlayTabs();
+    
+    // Ensure mode is selected by default
+    if (!document.querySelector('.mode-btn.selected')) {
+        const firstMode = document.querySelector('.mode-btn');
+        if (firstMode) {
+            firstMode.classList.add('selected');
+            setSessionStorage('selected_mode', firstMode.dataset.mode);
+        }
+    }
 }
 
 function updateCollectionPage() {
@@ -237,6 +255,17 @@ function viewAIReport() {
 function quickPlay(mode) {
     selectMode(mode);
     navigateTo('play');
+    // Pre-select first faction and loadout if available
+    setTimeout(() => {
+        const firstFaction = document.querySelector('.faction-btn');
+        if (firstFaction) {
+            firstFaction.click();
+        }
+        const firstLoadout = document.querySelector('.loadout-btn');
+        if (firstLoadout) {
+            firstLoadout.click();
+        }
+    }, 100);
 }
 
 if (typeof module !== 'undefined' && module.exports) {
