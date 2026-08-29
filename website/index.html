@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paint Battle - Real-Time Marble Autobattler</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo"><span class="logo-icon">🎨</span><span class="logo-text">Paint Battle</span></a>
+            <ul class="nav-links">
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#gameplay">Gameplay</a></li>
+                <li><a href="#modes">Modes</a></li>
+                <li><a href="#ai-coach">AI Coach</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+            </ul>
+            <a href="#play" class="cta-button">Play Now</a>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Paint Battle</h1>
+                <p class="hero-subtitle">Real-Time Marble-Driven Autobattler</p>
+                <p class="hero-description">Fire marbles from your cannon into branching tracks to summon units that automatically march and fight across a destructible battlefield.</p>
+                <div class="hero-buttons">
+                    <a href="#play" class="btn-primary">Start Playing</a>
+                    <a href="#overview" class="btn-secondary">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="game-preview">
+                    <div class="grid-preview">
+                        <div class="grid-row"><div class="tile wall"></div><div class="tile wall"></div><div class="tile wall"></div><div class="tile wall"></div><div class="tile wall"></div></div>
+                        <div class="grid-row"><div class="tile wall"></div><div class="tile path"></div><div class="tile path"></div><div class="tile path"></div><div class="tile wall"></div></div>
+                        <div class="grid-row"><div class="tile path"></div><div class="tile path unit red"></div><div class="tile path"></div><div class="tile path unit blue"></div><div class="tile path"></div></div>
+                        <div class="grid-row"><div class="tile wall"></div><div class="tile path"></div><div class="tile path"></div><div class="tile path"></div><div class="tile wall"></div></div>
+                        <div class="grid-row"><div class="tile wall"></div><div class="tile wall"></div><div class="tile wall"></div><div class="tile wall"></div><div class="tile wall"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator"><span>Scroll to Explore</span><div class="scroll-arrow"></div></div>
+    </section>
+
+    <section id="overview" class="section">
+        <div class="container">
+            <div class="section-header"><h2 class="section-title">Game Overview</h2><p class="section-subtitle">A competitive autobattler with a creative twist</p></div>
+            <div class="content-grid">
+                <div class="card"><div class="card-icon">🎯</div><h3>Marble Mechanic</h3><p>Fire marbles from your cannon on a fixed timer. Marbles split and combine in branching tracks to summon different units.</p></div>
+                <div class="card"><div class="card-icon">⚔️</div><h3>Auto-Battle</h3><p>Units automatically march and fight. Combat resolves automatically while you focus on strategy.</p></div>
+                <div class="card"><div class="card-icon">💰</div><h3>Card System</h3><p>Equip support cards and spend in-match gold to activate powerful effects during battle.</p></div>
+                <div class="card"><div class="card-icon">🏆</div><h3>Win Condition</h3><p>Destroy all enemy spawners to win. Matches end when only one spawner remains.</p></div>
+            </div>
+            <div class="feature-highlight">
+                <div class="feature-content"><div class="feature-icon">🎨</div><div class="feature-text"><h3>School-Appropriate Theme</h3><p>Units wield paintbrushes and paintball guns. Combat results in paint splatter, making it perfect for school environments.</p></div></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="goals" class="section alt">
+        <div class="container">
+            <div class="section-header"><h2 class="section-title">Goals & Success Metrics</h2></div>
+            <div class="goals-grid">
+                <div class="goal"><div class="goal-number">01</div><h3>Complete Data-Driven Game</h3><p>Deliver a multiplayer game with data-driven design, MySQL persistence, monetization, AI features, and public usability.</p></div>
+                <div class="goal"><div class="goal-number">02</div><h3>Real-Time Multiplayer</h3><p>Support competitive play across 1v1, 4-player, and 9-player modes with live matchmaking.</p></div>
+                <div class="goal"><div class="goal-number">03</div><h3>Ethical Monetization</h3><p>Sustainable monetization appropriate for general and school audiences. All upgrades earnable for free.</p></div>
+                <div class="goal"><div class="goal-number">04</div><h3>AI Coaching</h3><p>Provide post-match AI feedback analyzing performance and unit effectiveness.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gameplay" class="section">
+        <div class="container">
+            <div class="section-header"><h2 class="section-title">Core Gameplay</h2><p class="section-subtitle">Master the mechanics of Paint Battle</p></div>
+            <div class="gameplay-section">
+                <h3 class="gameplay-title">Marble Mechanic</h3>
+                <div class="gameplay-content">
+                    <div class="gameplay-text">
+                        <p>Marbles fire automatically from your cannon on a fixed timer that accelerates as the match progresses. In Standard mode, the timer starts at 3000ms and shortens over time. Quick mode starts faster for shorter matches.</p>
+                        <p>Marbles drop through a branching track where they can: split into multiple marbles, combine with others, or determine which unit spawns.</p>
+                    </div>
+                    <div class="gameplay-visual"><div class="cannon"><div class="cannon-base"></div><div class="cannon-barrel"></div></div></div>
+                </div>
+            </div>
+            <div class="gameplay-section">
+                <h3 class="gameplay-title">Factions</h3>
+                <div class="gameplay-content">
+                    <div class="gameplay-text">
+                        <p>Before each match, select your faction. Each has: exclusive marble color, signature mechanic/buff, faction level, and exclusive units/cards.</p>
+                    </div>
+                    <div class="factions-preview" id="factions">
+                        <div class="faction-card"><div class="faction-color red"></div><h4>Red Faction</h4><p>Persistent Healing</p></div>
+                        <div class="faction-card"><div class="faction-color blue"></div><h4>Blue Faction</h4><p>On-Hit Splitting</p></div>
+                        <div class="faction-card"><div class="faction-color green"></div><h4>Green Faction</h4><p>Buff Enhancement</p></div>
+                    </div>
+                </div>
+            </div>
+            <div class="gameplay-section">
+                <h3 class="gameplay-title">Weapons & Combat</h3>
+                <div class="gameplay-content">
+                    <div class="gameplay-text">
+                        <p>Units are split into two weapon classes:</p>
+                        <div class="weapon-cards">
+                            <div class="weapon-card"><div class="weapon-icon">🖌️</div><h4>Paintbrush</h4><p>Melee units that engage enemies directly.</p></div>
+                            <div class="weapon-card"><div class="weapon-icon">🎯</div><h4>Paintball Gun</h4><p>Ranged units firing paint charges.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="gameplay-section">
+                <h3 class="gameplay-title">Map & Tiles</h3>
+                <div class="gameplay-content">
+                    <div class="gameplay-text">
+                        <p>The battlefield is a square grid. Walls exist on boundary edges with their own HP pool. Intact walls block movement, destroyed walls become passable, and claimed edges re-lock against the opposing team.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="modes" class="section alt">
+        <div class="container">
+            <div class="section-header"><h2 class="section-title">Game Modes</h2><p class="section-subtitle">Choose your battle</p></div>
+            <div class="modes-grid">
+                <div class="mode-card featured">
+                    <div class="mode-badge">1v1</div>
+                    <div class="mode-content"><h3>Duel</h3><p>2 Players | 5x5 Grid</p><p>Spawners in opposite corners.</p></div>
+                </div>
+                <div class="mode-card">
+                    <div class="mode-badge">4-Player</div>
+                    <div class="mode-content"><h3>Quad Battle</h3><p>4 Players | 7x7 Grid</p><p>One spawner per corner, contested center.</p></div>
+                </div>
+                <div class="mode-card">
+                    <div class="mode-badge">9-Player</div>
+                    <div class="mode-content"><h3>Chaos Mode</h3><p>9 Players | 9x9 Grid</p><p>3x3 zone layout, one spawner per zone.</p></div>
+                </div>
+            </div>
+            <div class="pacing-section">
+                <h3>Match Pacing & Win Condition</h3>
+                <div class="pacing-cards">
+                    <div class="pacing-card"><div class="pacing-icon">⏱️</div><h4>Standard Mode</h4><p>No hard time cap. Timer accelerates indefinitely.</p></div>
+                    <div class="pacing-card"><div class="pacing-icon">⚡</div><h4>Quick Mode</h4><p>Faster-paced variant for shorter matches.</p></div>
+                </div>
+                <div class="win-condition"><h4>Win Condition</h4><p>A team is eliminated when its spawner is destroyed. Match ends when only one spawner remains.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="ai-coach" class="section">
+        <div class="container">
+            <div class="section-header"><h2 class="section-title">AI-Enhanced Feature: Post-Match Coach</h2></div>
+            <div class="ai-content">
+                <div class="ai-description">
+                    <p>After each match, receive AI-generated feedback analyzing your performance and unit effectiveness.</p>
+                    <div class="ai-features">
+                        <div class="ai-feature"><div class="ai-icon">🤖</div><h3>Opt-In/Opt-Out</h3><p>Enable or disable in settings. Never intervenes during live play.</p></div>
+                        <div class="ai-feature"><div class="ai-icon">⚡</div><h3>Zero Latency</h3><p>Runs after match ends, keeping real-time path free.</p></div>
+                        <div class="ai-feature"><div class="ai-icon">📊</div><h3>Comprehensive Analysis</h3><p>Analyzes match performance, unit effectiveness, and faction-specific insights.</p></div>
+                    </div>
+                </div>
+                <div class="ai-flow">
+                    <h3>How It Works</h3>
+                    <div class="flow-steps">
+                        <div class="flow-step"><div class="step-number">1</div><div class="step-content"><h4>Match Ends</h4><p>Game Server flushes full match event log to database</p></div></div>
+                        <div class="flow-step"><div class="step-number">2</div><div class="step-content"><h4>Job Queued</h4><p>If AI feedback enabled, job is queued to AI Coach Service</p></div></div>
+                        <div class="flow-step"><div class="step-number">3</div><div class="step-content"><h4>Analysis</h4><p>Service reads match event log + player's unit/card tiers and faction data</p></div></div>
+                        <div class="flow-step"><div class="step-number">4</div><div class="step-content"><h4>LLM Prompt</h4><p>Structured prompt sent to LLM requesting performance feedback</p></div></div>
+                        <div class="flow-step"><div class="step-number">5</div><div class="step-content"><h4>Report Stored</h4><p>Response stored and surfaced on post-match screen + match history</p></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="architecture" class="section">
+        <div class="container">
+            <div class="section-header"><h2 class="section-title">System Architecture</h2><p class="section-subtitle">Designed for performance and scalability</p></div>
+            <div class="architecture-content">
+                <p class="architecture-intro">The system is split by responsibility to keep the real-time match path fast while supporting persistent, data-driven progression.</p>
+                <div class="architecture-diagram">
+                    <div class="service-card game-server"><div class="service-icon">🎮</div><h3>Game Server</h3><ul class="service-functions"><li>Runs live match simulation</li><li>Marble resolution, auto-battle, wall/tile state</li><li>WebSocket communication with clients</li><li>Persists state changes to MySQL</li></ul></div>
+                    <div class="service-card auth-server"><div class="service-icon">🔐</div><h3>Auth/API Server</h3><ul class="service-functions"><li>Handles login and profile</li><li>Shop, chests, upgrades, loadouts</li><li>REST/HTTPS communication</li><li>Reads/writes MySQL directly</li></ul></div>
+                    <div class="service-card matchmaking"><div class="service-icon">🎯</div><h3>Matchmaking Service</h3><ul class="service-functions"><li>Queues players for Ranked, Casual, or Private matches</li><li>Hands off ready matches to Game Server</li></ul></div>
+                    <div class="service-card ai-coach"><div class="service-icon">🤖</div><h3>AI Coach Service</h3><ul class="service-functions"><li>Runs only after match ends</li><li>Reads logged match event data</li><li>Generates post-match feedback via LLM</li><li>Kept outside real-time path</li></ul></div>
+                    <div class="service-card database"><div class="service-icon">🗃️</div><h3>MySQL Database</h3><ul class="service-functions"><li>Persistent store for players, factions, catalog data</li><li>Player-owned collections</li><li>Matches and economy</li></ul></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="play" class="section cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to Battle?</h2>
+                <p class="cta-subtitle">Join the Paint Battle community and start playing today!</p>
+                <div class="cta-buttons">
+                    <a href="#" class="btn-primary btn-large">Start Playing Now</a>
+                    <a href="#overview" class="btn-secondary btn-large">Learn More</a>
+                </div>
+                <div class="cta-features">
+                    <div class="cta-feature"><div class="cta-icon">✓</div><span>Free to Play</span></div>
+                    <div class="cta-feature"><div class="cta-icon">✓</div><span>No Download Required</span></div>
+                    <div class="cta-feature"><div class="cta-icon">✓</div><span>Play in Browser</span></div>
+                    <div class="cta-feature"><div class="cta-icon">✓</div><span>Cross-Platform</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand"><span class="footer-logo">🎨 Paint Battle</span><p class="footer-tagline">Real-Time Marble Autobattler</p></div>
+            <div class="footer-bottom"><p>&copy; 2025 Paint Battle. All rights reserved.</p><p>Version 1.0 | Draft</p></div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
