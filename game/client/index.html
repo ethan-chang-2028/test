@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paint Battle</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/game.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen hidden">
+        <div class="loading-content">
+            <div class="loading-logo">PAINT BATTLE</div>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <div class="loading-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="logo">PAINT BATTLE</span>
+        </div>
+        <div class="nav-links">
+            <button class="nav-btn active" data-page="home">Home</button>
+            <button class="nav-btn" data-page="play">Play</button>
+            <button class="nav-btn" data-page="collection">Collection</button>
+            <button class="nav-btn" data-page="shop">Shop</button>
+            <button class="nav-btn" data-page="profile">Profile</button>
+        </div>
+        <div class="nav-auth">
+            <button id="login-btn" class="btn btn-outline">Login</button>
+            <button id="register-btn" class="btn btn-outline">Sign Up</button>
+        </div>
+    </nav>
+
+    <!-- Pages -->
+    <main class="main-content">
+        <!-- Home Page -->
+        <div id="home-page" class="page active">
+            <section class="hero">
+                <div class="hero-content">
+                    <h1 class="hero-title">PAINT BATTLE</h1>
+                    <p class="hero-subtitle">Conquer the Canvas. Claim the Grid.</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary btn-lg" onclick="quickPlay('1v1')">Quick Play (1v1)</button>
+                        <button class="btn btn-secondary btn-lg" onclick="quickPlay('4_player')">4-Player</button>
+                        <button class="btn btn-secondary btn-lg" onclick="showTutorial()">Tutorial</button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <canvas id="hero-canvas" width="400" height="400"></canvas>
+                </div>
+            </section>
+
+            <section class="features">
+                <div class="feature">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Strategic Gameplay</h3>
+                    <p>Fire marbles to spawn units and destroy enemy walls in this unique grid-based strategy game.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">👥</div>
+                    <h3>Multiplayer Battles</h3>
+                    <p>Compete against players worldwide in real-time 1v1, 4-player, or 9-player matches.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI Coach</h3>
+                    <p>Get personalized feedback and improve your strategy with our AI-powered coach.</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Play Page -->
+        <div id="play-page" class="page">
+            <div class="page-header">
+                <h2>Play</h2>
+                <p>Choose your game mode and loadout</p>
+            </div>
+
+            <div class="play-tabs">
+                <button class="tab-btn active" data-tab="quick">Quick Play</button>
+                <button class="tab-btn" data-tab="custom">Custom Game</button>
+                <button class="tab-btn" data-tab="private">Private Game</button>
+            </div>
+
+            <div class="play-content">
+                <!-- Quick Play Tab -->
+                <div id="quick-tab" class="tab-content active">
+                    <div class="mode-select">
+                        <button class="mode-btn selected" data-mode="1v1" onclick="selectMode('1v1')">1v1</button>
+                        <button class="mode-btn" data-mode="4_player" onclick="selectMode('4_player')">4-Player</button>
+                        <button class="mode-btn" data-mode="9_player" onclick="selectMode('9_player')">9-Player</button>
+                    </div>
+
+                    <div class="loadout-select">
+                        <h4>Select Faction</h4>
+                        <div id="faction-select" class="select-grid"></div>
+                    </div>
+
+                    <div class="loadout-select">
+                        <h4>Select Loadout</h4>
+                        <div id="loadout-select" class="select-grid"></div>
+                    </div>
+
+                    <button class="btn btn-primary btn-lg" onclick="startQuickPlay()">Find Match</button>
+                </div>
+
+                <!-- Custom Game Tab -->
+                <div id="custom-tab" class="tab-content">
+                    <div class="form-group">
+                        <label>Mode</label>
+                        <select id="custom-mode" class="form-select">
+                            <option value="1v1">1v1</option>
+                            <option value="4_player">4-Player</option>
+                            <option value="9_player">9-Player</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Grid Size</label>
+                        <select id="custom-size" class="form-select">
+                            <option value="5">5x5 (1v1)</option>
+                            <option value="7">7x7 (4-Player)</option>
+                            <option value="9">9x9 (9-Player)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Game Type</label>
+                        <select id="custom-type" class="form-select">
+                            <option value="casual">Casual</option>
+                            <option value="ranked">Ranked</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary btn-lg" onclick="createCustomGame()">Create Game</button>
+                </div>
+
+                <!-- Private Game Tab -->
+                <div id="private-tab" class="tab-content">
+                    <div class="form-group">
+                        <label>Invite Code</label>
+                        <input type="text" id="invite-code" class="form-input" placeholder="Enter invite code">
+                    </div>
+                    <button class="btn btn-primary btn-lg" onclick="joinPrivateGame()">Join Game</button>
+                    <button class="btn btn-secondary" onclick="createPrivateGame()">Create Private Game</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Page -->
+        <div id="game-page" class="page">
+            <div class="game-container">
+                <div class="game-sidebar left">
+                    <div class="player-stats">
+                        <div class="stat">
+                            <span class="stat-label">Gold</span>
+                            <span id="player-gold" class="stat-value">0</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Units</span>
+                            <span id="player-units" class="stat-value">0</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">HP</span>
+                            <span id="player-hp" class="stat-value">100</span>
+                        </div>
+                    </div>
+                    <div class="marble-select">
+                        <button class="marble-btn active" data-marble="attack" onclick="selectMarble('attack')">
+                            <span class="marble-icon">🔴</span>
+                            <span class="marble-name">Attack</span>
+                        </button>
+                        <button class="marble-btn" data-marble="buff" onclick="selectMarble('buff')">
+                            <span class="marble-icon">🟢</span>
+                            <span class="marble-name">Buff</span>
+                        </button>
+                        <button class="marble-btn" data-marble="split" onclick="selectMarble('split')">
+                            <span class="marble-icon">🟡</span>
+                            <span class="marble-name">Split</span>
+                        </button>
+                    </div>
+                    <div class="card-hand" id="card-hand"></div>
+                </div>
+
+                <div class="game-main">
+                    <div class="game-header">
+                        <div class="game-timer">
+                            <span id="game-timer">00:00</span>
+                        </div>
+                        <div class="game-info">
+                            <span id="game-status">Waiting for players...</span>
+                        </div>
+                    </div>
+                    <canvas id="game-canvas"></canvas>
+                </div>
+
+                <div class="game-sidebar right">
+                    <div class="opponent-stats">
+                        <h4>Opponent</h4>
+                        <div class="stat">
+                            <span class="stat-label">HP</span>
+                            <span id="opponent-hp" class="stat-value">100</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Units</span>
+                            <span id="opponent-units" class="stat-value">0</span>
+                        </div>
+                    </div>
+                    <div class="match-info">
+                        <h4>Match Info</h4>
+                        <div class="info-row">
+                            <span class="info-label">Mode:</span>
+                            <span id="match-mode">1v1</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Faction:</span>
+                            <span id="match-faction">Chaos</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collection Page -->
+        <div id="collection-page" class="page">
+            <div class="page-header">
+                <h2>Collection</h2>
+                <p>Manage your units, cards, and factions</p>
+            </div>
+
+            <div class="collection-tabs">
+                <button class="tab-btn active" data-tab="units">Units</button>
+                <button class="tab-btn" data-tab="cards">Cards</button>
+                <button class="tab-btn" data-tab="factions">Factions</button>
+            </div>
+
+            <div class="collection-content">
+                <!-- Units Tab -->
+                <div id="units-tab" class="tab-content active">
+                    <div class="collection-filters">
+                        <select id="unit-filter-faction" class="form-select">
+                            <option value="">All Factions</option>
+                        </select>
+                        <select id="unit-filter-rarity" class="form-select">
+                            <option value="">All Rarities</option>
+                            <option value="common">Common</option>
+                            <option value="uncommon">Uncommon</option>
+                            <option value="rare">Rare</option>
+                            <option value="epic">Epic</option>
+                            <option value="legendary">Legendary</option>
+                        </select>
+                        <select id="unit-filter-type" class="form-select">
+                            <option value="">All Types</option>
+                            <option value="melee">Melee</option>
+                            <option value="ranged">Ranged</option>
+                            <option value="buff">Buff</option>
+                            <option value="turret">Turret</option>
+                        </select>
+                    </div>
+                    <div id="units-grid" class="collection-grid"></div>
+                </div>
+
+                <!-- Cards Tab -->
+                <div id="cards-tab" class="tab-content">
+                    <div class="collection-filters">
+                        <select id="card-filter-faction" class="form-select">
+                            <option value="">All Factions</option>
+                        </select>
+                        <select id="card-filter-type" class="form-select">
+                            <option value="">All Types</option>
+                            <option value="unit">Unit</option>
+                            <option value="area">Area</option>
+                            <option value="wall">Wall</option>
+                            <option value="spawner">Spawner</option>
+                            <option value="player">Player</option>
+                        </select>
+                        <select id="card-filter-rarity" class="form-select">
+                            <option value="">All Rarities</option>
+                            <option value="common">Common</option>
+                            <option value="uncommon">Uncommon</option>
+                            <option value="rare">Rare</option>
+                            <option value="epic">Epic</option>
+                            <option value="legendary">Legendary</option>
+                        </select>
+                    </div>
+                    <div id="cards-grid" class="collection-grid"></div>
+                </div>
+
+                <!-- Factions Tab -->
+                <div id="factions-tab" class="tab-content">
+                    <div id="factions-grid" class="collection-grid"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shop Page -->
+        <div id="shop-page" class="page">
+            <div class="page-header">
+                <h2>Shop</h2>
+                <p>Purchase units, cards, and chests</p>
+            </div>
+
+            <div class="shop-header">
+                <div class="currency-display">
+                    <div class="currency">
+                        <span class="currency-icon">💰</span>
+                        <span id="shop-gold" class="currency-value">0</span>
+                        <span class="currency-name">Gold</span>
+                    </div>
+                    <div class="currency">
+                        <span class="currency-icon">⭐</span>
+                        <span id="shop-premium" class="currency-value">0</span>
+                        <span class="currency-name">Premium</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shop-tabs">
+                <button class="tab-btn active" data-tab="chests">Chests</button>
+                <button class="tab-btn" data-tab="units">Units</button>
+                <button class="tab-btn" data-tab="cards">Cards</button>
+                <button class="tab-btn" data-tab="currency">Currency</button>
+            </div>
+
+            <div class="shop-content">
+                <!-- Chests Tab -->
+                <div id="chests-tab" class="shop-tab-content active"></div>
+                
+                <!-- Units Tab -->
+                <div id="units-tab" class="shop-tab-content"></div>
+                
+                <!-- Cards Tab -->
+                <div id="cards-tab" class="shop-tab-content"></div>
+                
+                <!-- Currency Tab -->
+                <div id="currency-tab" class="shop-tab-content"></div>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profile-page" class="page">
+            <div class="page-header">
+                <h2>Profile</h2>
+                <p>Your stats and settings</p>
+            </div>
+
+            <div class="profile-content">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <span class="avatar-icon">👤</span>
+                    </div>
+                    <div class="profile-info">
+                        <h3 id="profile-username">Player</h3>
+                        <div class="profile-level">
+                            <span>Level </span>
+                            <span id="profile-level">1</span>
+                        </div>
+                        <div class="profile-xp">
+                            <span>XP: </span>
+                            <span id="profile-xp">0</span>
+                            <span> / </span>
+                            <span id="profile-xp-max">1000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-info">
+                            <span class="stat-name">Wins</span>
+                            <span id="stat-wins" class="stat-value">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎮</div>
+                        <div class="stat-info">
+                            <span class="stat-name">Matches</span>
+                            <span id="stat-matches" class="stat-value">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⚔️</div>
+                        <div class="stat-info">
+                            <span class="stat-name">Kills</span>
+                            <span id="stat-kills" class="stat-value">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-info">
+                            <span class="stat-name">Total Gold</span>
+                            <span id="stat-gold" class="stat-value">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h4>Recent Matches</h4>
+                    <div id="matches-list" class="matches-list"></div>
+                </div>
+
+                <div class="profile-section">
+                    <h4>Settings</h4>
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="ai-feedback-enabled" checked>
+                                <span>Enable AI Feedback</span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="sound-enabled" checked>
+                                <span>Enable Sound</span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="music-enabled" checked>
+                                <span>Enable Music</span>
+                            </label>
+                        </div>
+                        <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+                    </div>
+                </div>
+
+                <button class="btn btn-danger" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Game Over Screen -->
+    <div id="game-over-screen" class="game-over-screen">
+        <div class="game-over-content">
+            <h2 id="game-over-title" class="game-over-title">Game Over</h2>
+            <p id="game-over-message" class="game-over-message">Message</p>
+            <div class="game-over-buttons">
+                <button class="btn btn-primary" onclick="returnToLobby()">Return to Lobby</button>
+                <button class="btn btn-secondary" onclick="viewAIReport()">View AI Report</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Login</h2>
+                <button class="modal-close" onclick="hideModal('login-modal')">×</button>
+            </div>
+            <form id="login-form" class="modal-form">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="login-email" class="form-input" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="login-password" class="form-input" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+                <p class="modal-footer-text">Don't have an account? <button type="button" class="link-btn" onclick="showRegister()">Sign up</button></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Sign Up</h2>
+                <button class="modal-close" onclick="hideModal('register-modal')">×</button>
+            </div>
+            <form id="register-form" class="modal-form">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="register-username" class="form-input" placeholder="Choose a username" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="register-email" class="form-input" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="register-password" class="form-input" placeholder="Choose a password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+                <p class="modal-footer-text">Already have an account? <button type="button" class="link-btn" onclick="showLogin()">Login</button></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Matchmaking Modal -->
+    <div id="matchmaking-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Finding Match</h2>
+                <button class="modal-close" onclick="cancelMatchmaking()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="matchmaking-content">
+                    <div class="spinner"></div>
+                    <p>Searching for opponents...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Report Modal -->
+    <div id="ai-report-modal" class="modal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2 id="ai-report-title">AI Coach Report</h2>
+                <button class="modal-close" onclick="hideModal('ai-report-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="ai-report">
+                    <div class="report-header">
+                        <div class="report-date" id="ai-report-date"></div>
+                        <div class="report-grade">
+                            <span>Performance: </span>
+                            <span id="ai-performance-grade" class="grade">A</span>
+                        </div>
+                    </div>
+                    <div class="report-section">
+                        <h3>Overall Feedback</h3>
+                        <p id="ai-overall-feedback"></p>
+                    </div>
+                    <div class="report-section">
+                        <h3>Strengths</h3>
+                        <ul id="ai-strengths"></ul>
+                    </div>
+                    <div class="report-section">
+                        <h3>Weaknesses</h3>
+                        <ul id="ai-weaknesses"></ul>
+                    </div>
+                    <div class="report-section">
+                        <h3>Suggestions</h3>
+                        <ul id="ai-suggestions"></ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="hideModal('ai-report-modal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tutorial Modal -->
+    <div id="tutorial-modal" class="modal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2>How to Play</h2>
+                <button class="modal-close" onclick="hideModal('tutorial-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="tutorial">
+                    <div class="tutorial-step">
+                        <h3>1. Fire Marbles</h3>
+                        <p>Click or press Space to fire marbles from your cannon. Different marble types create different units:</p>
+                        <ul>
+                            <li><span style="color: #ff4444">🔴 Attack Marble</span> - Spawns a strong Melee unit</li>
+                            <li><span style="color: #44ff44">🟢 Buff Marble</span> - Spawns a supportive Buff unit</li>
+                            <li><span style="color: #ffff44">🟡 Split Marble</span> - Spawns two weaker units</li>
+                        </ul>
+                    </div>
+                    <div class="tutorial-step">
+                        <h3>2. Claim Territory</h3>
+                        <p>Your units automatically move and attack. Claim edges (walls) by having your units touch them. Claimed walls turn your team color.</p>
+                    </div>
+                    <div class="tutorial-step">
+                        <h3>3. Destroy Enemy Spawners</h3>
+                        <p>Send your units to attack the enemy spawner (circle with team number). Destroy all enemy spawners to win!</p>
+                    </div>
+                    <div class="tutorial-step">
+                        <h3>4. Use Cards</h3>
+                        <p>Play cards for special effects like healing, damage boosts, or spawning extra units. Cards cost Gold to play.</p>
+                    </div>
+                    <div class="tutorial-step">
+                        <h3>5. Manage Your Loadout</h3>
+                        <p>Before each match, select a faction and a loadout of 3 cards. Different factions have unique abilities.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="hideModal('tutorial-modal')">Got it!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/game/engine.js"></script>
+    <script src="js/game/renderer.js"></script>
+    <script src="js/game/input.js"></script>
+    <script src="js/game/network.js"></script>
+    <script src="js/ui/navigation.js"></script>
+    <script src="js/ui/modals.js"></script>
+    <script src="js/ui/collection.js"></script>
+    <script src="js/ui/shop.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
