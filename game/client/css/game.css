@@ -1,0 +1,547 @@
+/* ===== Game Canvas Styles =====
+
+#game-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: #0a0a0a;
+    cursor: crosshair;
+}
+
+/* ===== Game UI Overlay =====
+.game-ui {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.game-ui * {
+    pointer-events: auto;
+}
+
+/* ===== Marble Track =====
+.marble-track {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 20px;
+    border: 1px solid #374151;
+}
+
+.marble-slot {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #1f2937;
+    border: 2px solid #374151;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.marble-slot:hover {
+    border-color: #6366f1;
+}
+
+.marble-slot.active {
+    border-color: #6366f1;
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}
+
+.marble-slot.selected {
+    background: #6366f1;
+    border-color: #6366f1;
+}
+
+/* ===== Unit Info Panel =====
+.unit-info-panel {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid #374151;
+    border-radius: 10px;
+    padding: 15px;
+    min-width: 200px;
+}
+
+.unit-info-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+.unit-info-stat {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid #374151;
+    color: #9ca3af;
+    font-size: 0.9rem;
+}
+
+.unit-info-stat:last-child {
+    border-bottom: none;
+}
+
+.unit-info-stat span:last-child {
+    color: #fff;
+}
+
+/* ===== Timer =====
+.game-timer {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+/* ===== Gold Counter =====
+.gold-counter {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 1.2rem;
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px 15px;
+    border-radius: 10px;
+}
+
+/* ===== Minimap =====
+.minimap {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 150px;
+    height: 150px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid #374151;
+    border-radius: 10px;
+}
+
+.minimap-canvas {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+}
+
+/* ===== Selection Indicator =====
+.selection-indicator {
+    position: absolute;
+    pointer-events: none;
+    border: 2px solid #6366f1;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* ===== Health Bar =====
+.health-bar {
+    position: absolute;
+    height: 6px;
+    background: #000;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.health-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.health-bar-fill.high {
+    background: #10b981;
+}
+
+.health-bar-fill.medium {
+    background: #f59e0b;
+}
+
+.health-bar-fill.low {
+    background: #ef4444;
+}
+
+/* ===== Damage Number =====
+.damage-number {
+    position: absolute;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ff4444;
+    text-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+    animation: floatUp 1s ease-out forwards;
+    pointer-events: none;
+}
+
+.damage-number.heal {
+    color: #10b981;
+    text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+}
+
+/* ===== Wall Indicator =====
+.wall-indicator {
+    position: absolute;
+    width: 4px;
+    background: #4b5563;
+    pointer-events: none;
+}
+
+.wall-indicator.claimed-1 {
+    background: #ff4444;
+}
+
+.wall-indicator.claimed-2 {
+    background: #4444ff;
+}
+
+.wall-indicator.claimed-3 {
+    background: #44ff44;
+}
+
+.wall-indicator.claimed-4 {
+    background: #ff44ff;
+}
+
+/* ===== Spawner Indicator =====
+.spawner-indicator {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #4b5563;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+.spawner-indicator.team-1 {
+    border-color: #ff4444;
+    color: #ff4444;
+}
+
+.spawner-indicator.team-2 {
+    border-color: #4444ff;
+    color: #4444ff;
+}
+
+.spawner-indicator.team-3 {
+    border-color: #44ff44;
+    color: #44ff44;
+}
+
+.spawner-indicator.team-4 {
+    border-color: #ff44ff;
+    color: #ff44ff;
+}
+
+/* ===== Unit Tooltip =====
+.unit-tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid #374151;
+    border-radius: 10px;
+    padding: 15px;
+    min-width: 200px;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.tooltip-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.tooltip-stat {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    color: #9ca3af;
+    font-size: 0.9rem;
+}
+
+.tooltip-stat:last-child {
+    border-top: 1px solid #374151;
+    padding-top: 10px;
+    margin-top: 5px;
+}
+
+/* ===== Card Tooltip =====
+.card-tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid #374151;
+    border-radius: 10px;
+    padding: 15px;
+    min-width: 250px;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.card-tooltip-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+.card-tooltip-type {
+    color: #6366f1;
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+}
+
+.card-tooltip-description {
+    color: #9ca3af;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.card-tooltip-cost {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #374151;
+    color: #ffd700;
+    font-size: 1rem;
+}
+
+/* ===== Ability Cooldown =====
+.cooldown-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+    pointer-events: none;
+}
+
+.cooldown-ready {
+    display: none;
+}
+
+/* ===== Target Indicator =====
+.target-indicator {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border: 2px solid #ffd700;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: pulse 1s infinite;
+}
+
+.target-indicator.attack {
+    border-color: #ff4444;
+}
+
+.target-indicator.heal {
+    border-color: #10b981;
+}
+
+.target-indicator.buff {
+    border-color: #3b82f6;
+}
+
+/* ===== Projectile =====
+.projectile {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ffd700;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    pointer-events: none;
+    animation: projectile 0.5s ease-out forwards;
+}
+
+.projectile.attack {
+    background: #ff4444;
+    box-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+}
+
+.projectile.heal {
+    background: #10b981;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.projectile.buff {
+    background: #3b82f6;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+@keyframes projectile {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+}
+
+/* ===== Explosion Effect =====
+.explosion {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, #ffd700 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: explosion 0.5s ease-out forwards;
+}
+
+.explosion.attack {
+    background: radial-gradient(circle, #ff4444 0%, transparent 70%);
+}
+
+.explosion.heal {
+    background: radial-gradient(circle, #10b981 0%, transparent 70%);
+}
+
+.explosion.buff {
+    background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
+}
+
+@keyframes explosion {
+    0% {
+        transform: scale(0.5);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+/* ===== Paint Splatter Effect =====
+.paint-splatter {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    pointer-events: none;
+    animation: splatter 1s ease-out forwards;
+}
+
+@keyframes splatter {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+/* ===== Responsive Game =====
+@media (max-width: 1024px) {
+    .marble-track {
+        bottom: 10px;
+        padding: 8px 15px;
+    }
+    
+    .marble-slot {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+    }
+    
+    .unit-info-panel {
+        display: none;
+    }
+    
+    .game-timer {
+        font-size: 1.2rem;
+        padding: 8px 15px;
+    }
+    
+    .gold-counter {
+        font-size: 1rem;
+        padding: 8px 12px;
+    }
+    
+    .minimap {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+@media (max-width: 768px) {
+    .marble-track {
+        display: none;
+    }
+    
+    .game-timer {
+        top: 10px;
+        font-size: 1rem;
+        padding: 5px 10px;
+    }
+    
+    .gold-counter {
+        top: 10px;
+        left: 10px;
+        font-size: 0.9rem;
+        padding: 5px 10px;
+    }
+    
+    .minimap {
+        display: none;
+    }
+}
